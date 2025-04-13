@@ -1,0 +1,43 @@
+name: Daily Jalopy Inventory Scrape
+
+on:
+  schedule:
+    - cron: '30 13 * * *'   # daily at 6:30AM MST
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Jalopy Inventory Scraper
+        env:
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+        run: |
+          python jalopy_inventory_update.py
+
+      - name: Upload generated CSVs as artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: jalopy-inventory-csvs-${{ github.run_id }}
+          path: |
+            jalopy_inventory.csv
+            jalopy_new_vehicles.csv
+            full_inventory_history/
+            new_inventory_history/
