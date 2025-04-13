@@ -30,14 +30,3 @@ jobs:
           EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
         run: |
           python jalopy_inventory_update.py
-
-      - name: Upload generated CSVs as artifacts
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: jalopy-inventory-csvs-${{ github.run_id }}
-          path: |
-            jalopy_inventory.csv
-            jalopy_new_vehicles.csv
-            full_inventory_history/
-            new_inventory_history/
