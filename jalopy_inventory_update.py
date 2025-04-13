@@ -143,7 +143,7 @@ history_new_path = os.path.join(new_inventory_history, f"jalopy_new_vehicles_{TO
 df_full.to_csv(history_full_path, index=False)
 df_new.to_csv(history_new_path, index=False)
 
-print(f"Full inventory: jalopy_inventory_updated.csv ({len(df_full)} vehicles)")
+print(f"Full inventory: jalopy_inventory.csv ({len(df_full)} vehicles)")
 print(f"New vehicles only: jalopy_inventory_new_vehicles.csv ({len(df_new)} vehicles)")
 print(f"Historical archives saved")
 
