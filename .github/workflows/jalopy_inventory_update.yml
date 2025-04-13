@@ -29,7 +29,7 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
         run: |
-          python jalopy_scraper.py
+          python jalopy_inventory_update.py
 
       - name: Commit updated CSVs
         run: |
