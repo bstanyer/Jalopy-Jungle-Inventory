@@ -102,7 +102,7 @@ row_grouped = defaultdict(list)
 for v in potential_new:
     row_grouped[(v["yard"], v["row"])].append(v)
 
-rows_to_replace = {key for key, vehicles in row_grouped.items() if len(vehicles) >= 3}
+rows_to_replace = {key for key, vehicles in row_grouped.items() if len(vehicles) >= 7}
 
 # ---------- FINAL MERGE ----------
 updated_vehicles = []
@@ -151,7 +151,18 @@ print(f"Historical archives saved")
 load_dotenv()
 EMAIL_SENDER = os.environ["EMAIL_SENDER"]
 EMAIL_PASSWORD = os.environ["EMAIL_PASSWORD"]
-EMAIL_RECIPIENT = os.environ["EMAIL_RECIPIENT"]
+EMAIL_RECIPIENTS_RAW = os.environ["EMAIL_RECIPIENTS"]
+
+# Parse recipients
+all_recipients = [email.strip() for email in EMAIL_RECIPIENTS_RAW.split(",") if email.strip()]
+
+if not all_recipients:
+    print("No recipients found in EMAIL_RECIPIENTS environment variable.")
+    exit(1)
+
+# First person gets the email directly; others are BCC'd
+EMAIL_TO = all_recipients[0]
+EMAIL_BCC = all_recipients[1:]
 
 # Only send email if there are new vehicles
 if not df_new.empty:
@@ -206,7 +217,8 @@ if not df_new.empty:
     # Send email with HTML as primary content
     yag = yagmail.SMTP(EMAIL_SENDER, EMAIL_PASSWORD)
     yag.send(
-        to=EMAIL_RECIPIENT,
+        to=EMAIL_TO,
+        bcc=EMAIL_BCC,
         subject=subject,
         contents=[body]  # HTML first to make it preferred
     )
