@@ -9,6 +9,7 @@ from collections import defaultdict
 import os
 import yagmail
 from dotenv import load_dotenv
+import re
 
 # ---------- CONFIGURATION ----------
 BASE_URL = "https://inventory.pickapartjalopyjungle.com"
@@ -154,7 +155,7 @@ EMAIL_PASSWORD = os.environ["EMAIL_PASSWORD"]
 EMAIL_RECIPIENTS_RAW = os.environ["EMAIL_RECIPIENTS"]
 
 # Parse recipients
-all_recipients = [email.strip() for email in EMAIL_RECIPIENTS_RAW.split(",") if email.strip()]
+all_recipients = [email.strip() for email in re.split(r"[,\n]", EMAIL_RECIPIENTS_RAW) if email.strip()]
 
 if not all_recipients:
     print("No recipients found in EMAIL_RECIPIENTS environment variable.")
