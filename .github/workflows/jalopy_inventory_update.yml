@@ -2,7 +2,7 @@ name: Daily Jalopy Inventory Scrape
 
 on:
   schedule:
-    - cron: '30 11 * * *'   # Runs at 5:30 AM MST / 11:30 UTC daily
+    - cron: '41 9 * * *'   # Runs at 2:41 AM MST / 9:41 UTC daily
   workflow_dispatch:
 
 permissions:
